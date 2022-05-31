@@ -48,6 +48,7 @@ def detect_face(img, gray_image, original_image, face_cascade, height,width):
         break
 
     #resizing for uniformity
+    # cv2.imshow("Face",face)
     try:
         resize = cv2.resize(face,(800,600))
         return resize
