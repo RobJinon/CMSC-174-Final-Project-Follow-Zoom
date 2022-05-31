@@ -54,15 +54,15 @@ def main():
                         cv2.rectangle(original_image, pt1=(x, y), pt2=(x+w, y+h), color=(255, 255, 255), thickness=2)
 
                         face = img[y:y + h, x:x + w]
-                        cv2.imshow("cropped face", face)
+                        cv2.imshow("zoomed face", face)
                         
                     return cv2.cvtColor(original_image, cv2.COLOR_RGB2BGR)
 
                 # displaying the results
                 cv2.namedWindow('Cam', cv2.WINDOW_NORMAL)
                 cv2.resizeWindow('Cam', int(width), int(height))
-                cv2.namedWindow('cropped face', cv2.WINDOW_NORMAL)
-                cv2.resizeWindow('cropped face', int(height/2), int(height/2))
+                cv2.namedWindow('zoomed face', cv2.WINDOW_NORMAL)
+                cv2.resizeWindow('zoomed face', int(height*2/3), int(height*2/3))
                 image_with_detections = detect_face(gray_image, original_image, face_cascade)
                 cv2.imshow("Cam", image_with_detections)
                 k = cv2.waitKey(30)
