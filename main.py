@@ -69,8 +69,13 @@ def main():
                 # displaying the results
                 cv2.namedWindow('Cam', cv2.WINDOW_NORMAL)
                 cv2.resizeWindow('Cam', int(width), int(height))
+<<<<<<< HEAD
                 cv2.namedWindow('cropped face', cv2.WINDOW_NORMAL)
                 cv2.resizeWindow('cropped face', int(width), int(height))
+=======
+                cv2.namedWindow('zoomed face', cv2.WINDOW_NORMAL)
+                cv2.resizeWindow('zoomed face', int(height*2/3), int(height*2/3))
+>>>>>>> fa0c8f4821a53fc5ef40df6cdfc6661015d12b5c
                 image_with_detections = detect_face(gray_image, original_image, face_cascade)
                 cv2.imshow("Cam", image_with_detections)
                 k = cv2.waitKey(30)
