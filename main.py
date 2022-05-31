@@ -12,6 +12,7 @@ def main():
     # define the window layout
     layout = [[sg.Text('Follow Face Filter', size=(40, 1), justification='center', font='Helvetica 20')],
               [sg.Image(filename='', key='image')],
+              [sg.Image(filename='', key='image')],
               [sg.Button('Start', size=(10, 1), font='Helvetica 14'),
                sg.Button('Exit', size=(10, 1), font='Helvetica 14'), ]]
 
@@ -57,25 +58,43 @@ def main():
                     for (x, y, w, h) in detected_faces:
                         cv2.rectangle(original_image, pt1=(x, y), pt2=(x+w, y+h), color=(255, 255, 255), thickness=2)
 
-                        y_dist = min(y, height-y, 0.15*(height))
-                        x_dist = min(x, width-x *(width/height), 0.15*(width))
-                        print(x_dist,y_dist)
+                        width_ratio = w/width
+                        height_ratio = (h/height)
 
-                        if not ( x < 100 or (x > (width - 100)) or y < 100 or y > (height - 100)):
-                            face = img[y - int(y_dist):y + int(y_dist)+h, x - int(x_dist):x + int(x_dist)+w]
-                            
-                    
-                    cv2.imshow("cropped face", face)
+
+                        y_dist = min(y, height-y, 0.1*(height))
+                        x_dist = min(x, width-x *width_ratio, 0.2*(width))
+
+                        max_width = (w*3)*width_ratio
+                        side = (max_width-w)/2
                         
-                    return cv2.cvtColor(original_image, cv2.COLOR_RGB2BGR)
+                        right = int(x_dist)+side+w
+                        left = int(x_dist) + side
+                        
+                        if x < w:
+                            right += (w-x)
+
+                        if (width-x) < w:
+                            left += (w+x)
+
+                        face = img[y - int(y_dist):y + int(y_dist)+h , x-int(left):x+int(right)]
+                        
+
+                    
+                    imgbytes = cv2.imencode('.png', face)[1].tobytes()  # ditto
+                    window['image'].update(data=imgbytes)
+                    return face
+                    # cv2.imshow("cropped face", face)
+
+                    # return cv2.cvtColor(original_image, cv2.COLOR_RGB2BGR)
 
                 # displaying the results
                 cv2.namedWindow('Cam', cv2.WINDOW_NORMAL)
                 cv2.resizeWindow('Cam', int(width), int(height))
                 cv2.namedWindow('cropped face', cv2.WINDOW_NORMAL)
                 cv2.resizeWindow('cropped face', int(width), int(height))
-                image_with_detections = detect_face(gray_image, original_image, face_cascade)
-                cv2.imshow("Cam", image_with_detections)
+                detect_face(gray_image, original_image, face_cascade)
+                # cv2.imshow("Cam", image_with_detections)
                 k = cv2.waitKey(30)
                 if k == 27:
                     break
