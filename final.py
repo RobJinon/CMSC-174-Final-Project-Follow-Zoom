@@ -52,7 +52,7 @@ def detect_face(img, gray_image, original_image, face_cascade, height,width):
         resize = cv2.resize(face,(800,600))
         return resize
     except Exception as e:
-        print(str(e))
+        # print(str(e))
         return face
 
 def followZoom():
@@ -61,6 +61,7 @@ def followZoom():
 
     # define the window layout
     layout = [[sg.Text('Follow Face Filter', size=(40, 1), justification='center', font='Helvetica 20')],
+              [sg.Text('by Faeldonea and Jinon (2022)', size=(70, 1), justification='center', font='Helvetica 10')],
               [sg.Image(filename='', key='image')],
               [sg.Button('Start', size=(10, 1), font='Helvetica 14'),
                sg.Button('Stop', size=(10, 1), font='Any 14'),
@@ -108,8 +109,8 @@ def followZoom():
             gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             face_cascade = cv2.CascadeClassifier(
                     cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-            frame = detect_face(img, gray_image, original_image, face_cascade, height,width)
             try:
+                frame = detect_face(img, gray_image, original_image, face_cascade, height,width)
                 imgbytes = cv2.imencode('.png', frame)[1].tobytes()  # ditto
             except Exception:
                 img = np.full((600,600),0)
