@@ -1,3 +1,5 @@
+from os import X_OK
+from turtle import distance
 import cv2
 import numpy as np
 import PySimpleGUI as sg
@@ -50,11 +52,17 @@ def main():
                 def detect_face(gray_image, original_image, face_cascade):
                     detected_faces = face_cascade.detectMultiScale(
                         image=gray_image, scaleFactor=1.3, minNeighbors=8)
+                    face = cv2.cvtColor(original_image, cv2.COLOR_BGR2RGB)
+
                     for (x, y, w, h) in detected_faces:
                         cv2.rectangle(original_image, pt1=(x, y), pt2=(x+w, y+h), color=(255, 255, 255), thickness=2)
 
-                        face = img[y:y + h, x:x + w]
-                        cv2.imshow("cropped face", face)
+                        x_dist = min(x, width-x, 0.25*(width))
+                        y_dist = min(y, height-y, 0.25*(height))
+                        print(x_dist,y_dist)
+                        face = img[y - int(y_dist):y + int(y_dist)+h, x - int(x_dist):x + int(x_dist)+w]
+                    
+                    cv2.imshow("cropped face", face)
                         
                     return cv2.cvtColor(original_image, cv2.COLOR_RGB2BGR)
 
@@ -62,7 +70,7 @@ def main():
                 cv2.namedWindow('Cam', cv2.WINDOW_NORMAL)
                 cv2.resizeWindow('Cam', int(width), int(height))
                 cv2.namedWindow('cropped face', cv2.WINDOW_NORMAL)
-                cv2.resizeWindow('cropped face', int(height/2), int(height/2))
+                cv2.resizeWindow('cropped face', int(width), int(height))
                 image_with_detections = detect_face(gray_image, original_image, face_cascade)
                 cv2.imshow("Cam", image_with_detections)
                 k = cv2.waitKey(30)
