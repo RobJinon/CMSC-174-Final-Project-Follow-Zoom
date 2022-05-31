@@ -57,10 +57,13 @@ def main():
                     for (x, y, w, h) in detected_faces:
                         cv2.rectangle(original_image, pt1=(x, y), pt2=(x+w, y+h), color=(255, 255, 255), thickness=2)
 
-                        x_dist = min(x, width-x, 0.25*(width))
-                        y_dist = min(y, height-y, 0.25*(height))
+                        y_dist = min(y, height-y, 0.15*(height))
+                        x_dist = min(x, width-x *(width/height), 0.15*(width))
                         print(x_dist,y_dist)
-                        face = img[y - int(y_dist):y + int(y_dist)+h, x - int(x_dist):x + int(x_dist)+w]
+
+                        if not ( x < 100 or (x > (width - 100)) or y < 100 or y > (height - 100)):
+                            face = img[y - int(y_dist):y + int(y_dist)+h, x - int(x_dist):x + int(x_dist)+w]
+                            
                     
                     cv2.imshow("cropped face", face)
                         
@@ -69,13 +72,8 @@ def main():
                 # displaying the results
                 cv2.namedWindow('Cam', cv2.WINDOW_NORMAL)
                 cv2.resizeWindow('Cam', int(width), int(height))
-<<<<<<< HEAD
                 cv2.namedWindow('cropped face', cv2.WINDOW_NORMAL)
                 cv2.resizeWindow('cropped face', int(width), int(height))
-=======
-                cv2.namedWindow('zoomed face', cv2.WINDOW_NORMAL)
-                cv2.resizeWindow('zoomed face', int(height*2/3), int(height*2/3))
->>>>>>> fa0c8f4821a53fc5ef40df6cdfc6661015d12b5c
                 image_with_detections = detect_face(gray_image, original_image, face_cascade)
                 cv2.imshow("Cam", image_with_detections)
                 k = cv2.waitKey(30)
