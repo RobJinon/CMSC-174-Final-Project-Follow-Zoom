@@ -5,7 +5,7 @@ import numpy as np
 import PySimpleGUI as sg
 
 
-def main():
+def followZoom():
 
     sg.theme('Black')
 
@@ -101,6 +101,5 @@ def main():
             cv2.destroyAllWindows()
             open = False
             
-
-
-main()
+if __name__ == '__main__':
+    followZoom()
